@@ -4,6 +4,7 @@
 import sys, os, ConfigParser, traceback
 
 # Local imports.
+from lib import *
 
 # Global variables.
 server_config = {}
@@ -60,3 +61,6 @@ if __name__ == '__main__':
 
     print server_config
 
+    from twisted.internet import reactor
+    reactor.listenTCP(22001, conn.GameFactory())
+    reactor.run()
