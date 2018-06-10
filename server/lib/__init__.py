@@ -1,1 +1,1 @@
-__all__ = ["conn"]
+__all__ = ["conn", "config"]
