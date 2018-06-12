@@ -1,8 +1,10 @@
 ## Library for handling client connections.
 
-from twisted.internet.protocol import Factory
+from twisted.internet.protocol import Factory, ClientFactory
 from twisted.protocols.basic import LineReceiver
-from twisted.internet import reactor, task
+from twisted.internet import reactor, task, defer
+
+from os import linesep
 
 class GameReceiver(LineReceiver):
     def __init__(self, factory):
@@ -37,6 +39,8 @@ class GameClientProtocol(GameReceiver):
         self.state = "CONNECT"
 
 class GameConsoleProtocol(GameReceiver):
+    delimiter = linesep.encode("ascii")
+
     def __init__(self, factory):
         self.factory = factory
         self.name = 'GameConsoleProtocol'
@@ -56,6 +60,7 @@ class GameConsoleProtocol(GameReceiver):
             self.shutdown = reactor.callLater(5, self.factory.GameShutdown)
     def console(self, message):
         self.transport.write(b'[CON] ' + message + '\n')
+
 
 class GameFactory(Factory):
     def __init__(self, config):

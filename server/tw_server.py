@@ -2,7 +2,7 @@
 
 # Library imports.
 import sys, os
-from twisted.internet import reactor, task, stdio
+from twisted.internet import reactor, stdio
 
 # Local imports.
 from lib import *
@@ -24,7 +24,12 @@ if __name__ == '__main__':
     server_config = config.parseConfig(config_file)
 
     # Set up the reactor to listen on the specified port.
-    reactor.listenTCP(22001, conn.GameFactory(server_config))
+    gf = conn.GameFactory(server_config)
+    reactor.listenTCP(22001, gf)
+
+    # Hook up stdio to a barebones client to use for our console.
+    # TODO: Only if not daemonizing.
+    stdio.StandardIO(conn.GameConsoleProtocol(gf))
 
     # And go!
     reactor.run()
