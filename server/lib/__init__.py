@@ -1,1 +1,1 @@
-__all__ = ["conn", "config", "game", "graph"]
+__all__ = ["conn", "config", "game", "starmap"]

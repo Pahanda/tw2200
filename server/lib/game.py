@@ -1,7 +1,7 @@
 # Game data structures.
 
-import graph
+import starmap
 
 class GameData():
     def __init__(self):
-        self.map = graph.Graph()
+        self.starmap = starmap.StarMap()
