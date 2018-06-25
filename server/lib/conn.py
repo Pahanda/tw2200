@@ -10,6 +10,8 @@ from twisted.python.log import addObserver
 from os import linesep
 import sys
 
+import game
+
 class GameReceiver(LineReceiver):
     def __init__(self, factory):
         self.factory = factory
@@ -63,9 +65,11 @@ class GameConsoleProtocol(GameReceiver):
             self.console('Sending termination signal for TW2200 Server by console request.')
             self.factory.log.info('Console requested server shutdown in 5 seconds.')
             self.factory.shutdown = reactor.callLater(5, self.factory.GameShutdown, 'console request')
+        else:
+            self.console('Unknown console command. Please type "help" for help.')
+
     def console(self, message):
         self.transport.write(b'[CON] ' + message + '\n')
-
 
 class GameFactory(Factory):
     def __init__(self, config):
@@ -85,8 +89,12 @@ class GameFactory(Factory):
         log_filter = FilteringLogObserver(textFileLogObserver(sys.stdout), predicates=logging_level_predicate)
         # And register global logging for the filtering observer.
         globalLogBeginner.beginLoggingTo([log_filter])
+
         # Passed-in game configuration.
         self.configuration = config
+
+        # Game data.
+        self.game = game.GameData()
 
         # Init main game loop.
         self.game_loop = task.LoopingCall(self.GameLoop)

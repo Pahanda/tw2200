@@ -20,7 +20,6 @@ if __name__ == '__main__':
         config_file = sys.argv[1]
 
     print "Initializing Trade Wars 2200 server with configuration file '"+config_file+"'..."
-
     server_config = config.parseConfig(config_file)
 
     # Set up the reactor to listen on the specified port.
